@@ -9,8 +9,7 @@ gfortran -x f95-cpp-input -O3 -c  parameters_site.f90 \
  parameters_plant.f90 environment.f90 resources.f90 soil.f90 \
  plant.f90 set_params.f90
 
-f2py -c -I.  environment.o parameters_plant.o parameters_site.o \
- plant.f90  -m plant
+f2py -c -I.  environment.f90 parameters_plant.f90 parameters_site.f90 plant.f90  -m plant
 
 #f2py -c -I.  parameters_plant.o parameters_site.o \
 #environment.f90  -m environment
@@ -26,6 +25,12 @@ f2py -c -I.  parameters_plant.f90 parameters_site.f90 environment.f90  -m enviro
 f2py -c  -I. parameters_plant.o parameters_site.o \
     resources.o soil.o plant.o set_params.o \
     environment.f90 basgra.f90  -m basgra
+
+f2py -c  parameters_plant.f90 parameters_site.f90 \
+    resources.f90 soil.f90 plant.f90 set_params.f90 \
+    environment.f90 basgra.f90  -m basgra
+
+
 
 #python -c 'import basgra; print("hello")'
 

@@ -19,3 +19,10 @@ for d in range(100):
     print(environment.environment.dayl)
 
 # %%
+import basgra
+basgra.parameters_site.lat = 60
+for d in range(100):
+    basgra.environment.ddayl(d)
+    print(basgra.environment.dayl)
+
+# %%
