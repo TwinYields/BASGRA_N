@@ -24,12 +24,12 @@ use plant
 implicit none
 
 integer, dimension(100,2) :: DAYS_HARVEST
+!integer, parameter :: NMAXDAYS = 10000
+
+
+
 real                      :: PARAMS(120)
-#ifdef weathergen  
-  integer, parameter      :: NWEATHER =  7
-#else
-  integer, parameter      :: NWEATHER =  8
-#endif
+integer, parameter      :: NWEATHER =  8
 real                      :: MATRIX_WEATHER(NMAXDAYS,NWEATHER)
 real   , dimension(100,3) :: CALENDAR_FERT, CALENDAR_NDEP
 integer, dimension(100,2) :: DAYS_FERT    , DAYS_NDEP
@@ -79,14 +79,10 @@ DOYI   = MATRIX_WEATHER(:,2)
 GRI    = MATRIX_WEATHER(:,3)
 TMMNI  = MATRIX_WEATHER(:,4)
 TMMXI  = MATRIX_WEATHER(:,5)
-#ifdef weathergen  
-  RAINI = MATRIX_WEATHER(:,6)
-  PETI  = MATRIX_WEATHER(:,7)
-#else
-  VPI   = MATRIX_WEATHER(:,6)
-  RAINI = MATRIX_WEATHER(:,7)
-  WNI   = MATRIX_WEATHER(:,8)
-#endif
+VPI   = MATRIX_WEATHER(:,6)
+RAINI = MATRIX_WEATHER(:,7)
+WNI   = MATRIX_WEATHER(:,8)
+
 
 ! Calendars
 DAYS_FERT  = CALENDAR_FERT (:,1:2)
@@ -147,12 +143,8 @@ do day = 1, NDAYS
   call Physics        (DAVTMP,Fdepth,ROOTD,Sdepth,WAS, Frate)
   call MicroClimate   (doy,DRYSTOR,Fdepth,Frate,LAI,Sdepth,Tsurf,WAPL,WAPS,WETSTOR, &
                                                        FREEZEPL,INFIL,PackMelt,poolDrain,poolInfil, &
-                                                       pSnow,reFreeze,SnowMelt,THAWPS,wRemain)
-#ifdef weathergen  
-  call PEVAPINPUT     (LAI)
-#else
+                                                     pSnow,reFreeze,SnowMelt,THAWPS,wRemain)
   call PENMAN         (LAI)
-#endif
   ! Resources
   call Light          (DAYL,DTR,LAI,PAR)
   call EVAPTRTRF      (Fdepth,PEVAP,PTRAN,ROOTD,WAL,   EVAP,TRAN)
@@ -180,7 +172,7 @@ do day = 1, NDAYS
   call O2fluxes       (O2,PERMgas,ROOTD,RplantAer,     O2IN,O2OUT)
   call N_fert         (year,doy,DAYS_FERT,NFERTV,      Nfert)
   call N_dep          (year,doy,DAYS_NDEP,NDEPV,       Ndep)
-  call CNsoil         (ROOTD,RWA,WFPS,WAL,GRT,CLITT,CSOMF,NLITT,NSOMF,NSOMS,NMIN,CSOMS) 
+  call CNsoil         (ROOTD,RWA,WFPS,WAL,GRT,CLITT,CSOMF,NLITT,NSOMF,NSOMS,NMIN,CSOMS)
   call Nplant         (NSHmob,CLV,CRT,CST,DLAI,DLV,DRT,GLAI,GLV,GRT,GST, &
                                                        HARVLA,HARVLV,HARVST,LAI,NRT,NSH, &
                                                        DNRT,DNSH,GNRT,GNSH,HARVNSH, &
@@ -196,9 +188,9 @@ do day = 1, NDAYS
   TILTOT    = TILG1 + TILG2 + TILV
 
   NSH_DMSH  = NSH / DMSH             ! N content in shoot DM; g N g-1 DM
-  
+
   PROTEIN   = NSH * 6.25             ! Crude protein; g m-2
-  F_PROTEIN = PROTEIN / DMSH         ! Crude protein in shoot dry matter; g g-1   
+  F_PROTEIN = PROTEIN / DMSH         ! Crude protein in shoot dry matter; g g-1
   F_ASH	    = 0.069 + 0.14*F_PROTEIN
 
   call Digestibility  (DM,DMLV,DMRES,DMSH,DMST,DMSTUB,PHEN, &
@@ -212,7 +204,7 @@ do day = 1, NDAYS
   y(day, 2) = year
   y(day, 3) = doy
   y(day, 4) = DAVTMP
-  
+
   y(day, 5) = CLV
   y(day, 6) = CLVD
   y(day, 7) = YIELD_LAST
@@ -236,7 +228,7 @@ do day = 1, NDAYS
   y(day,25) = WAPS
   y(day,26) = WAS
   y(day,27) = WETSTOR
-  
+
   y(day,28) = DM                     ! "DM"      = Aboveground dry matter in g m-2
   y(day,29) = DMRES / DM             ! "RES"     = Reserves in g g-1 aboveground dry matter
   y(day,30) = LERG                   !
@@ -266,7 +258,7 @@ do day = 1, NDAYS
   y(day,53) = NSH             ! g N m-2
   y(day,54) = GNSH
   y(day,55) = DNSH
-  y(day,56) = HARVNSH 
+  y(day,56) = HARVNSH
   y(day,57) = NSH / (CLV+CST) ! - "NCSH"
   y(day,58) = NCGSH
   y(day,59) = NCDSH
@@ -286,7 +278,7 @@ do day = 1, NDAYS
   y(day,72) = Nfert_TOT
   y(day,73) = YIELD_TOT
   y(day,74) = DM_MAX
-  
+
   y(day,75) = F_PROTEIN
   y(day,76) = F_ASH
 
@@ -303,7 +295,7 @@ do day = 1, NDAYS
   y(day,86) = RDRS
   y(day,87) = RAIN
   y(day,88) = Nleaching
-  
+
   y(day,89) = NSHmob
   y(day,90) = NSHmobsoil
   y(day,91) = Nfixation
@@ -315,10 +307,10 @@ do day = 1, NDAYS
 
   y(day,96) = NRT
   y(day,97) = NRT / CRT
-  
+
   y(day,98) = rNLITT
   y(day,99) = rNSOMF
-  
+
   y(day,100) = DAYL
 
 ! State equations plants
@@ -335,19 +327,19 @@ do day = 1, NDAYS
   TILG1   = TILG1           + TILVG1 - TILG1G2
   TILG2   = TILG2                    + TILG1G2 - HARVTILG2
   TILV    = TILV    + GTILV - TILVG1           - DTILV
-  if((LAT>0).AND.(doy==305)) VERN = 0  
-  if((LAT<0).AND.(doy==122)) VERN = 0  
+  if((LAT>0).AND.(doy==305)) VERN = 0
+  if((LAT<0).AND.(doy==122)) VERN = 0
   if(DAVTMP<TVERN)           VERN = 1
   YIELD     = (HARVLV + HARVST*HAGERE)/0.45 + HARVRE/0.40
   if(YIELD>0) YIELD_LAST = YIELD
   YIELD_TOT = YIELD_TOT + YIELD
-  
+
   NRT       = NRT   + GNRT - DNRT
   NSH       = NSH   + GNSH - DNSH - HARVNSH - NSHmob
 
   Nfert_TOT = Nfert_TOT + Nfert
   DM_MAX    = max( DM, DM_MAX )
-  
+
 ! State equations soil
   CLITT   = CLITT + DLV + DSTUB              - rCLITT - dCLITT
   CSOMF   = CSOMF + DRT         + dCLITTsomf - rCSOMF - dCSOMF
@@ -355,7 +347,7 @@ do day = 1, NDAYS
   DRYSTOR = DRYSTOR + reFreeze + Psnow - SnowMelt
   Fdepth  = Fdepth  + Frate
   NLITT   = NLITT + DNSH             - rNLITT - dNLITT
-  NSOMF   = NSOMF + DNRT + NLITTsomf - rNSOMF - dNSOMF 
+  NSOMF   = NSOMF + DNRT + NLITTsomf - rNSOMF - dNSOMF
   NSOMS   = NSOMS        + NSOMFsoms          - dNSOMS
   NMIN    = NMIN  + Ndep + Nfert + Nmineralisation + Nfixation + NSHmobsoil &
             - Nupt - Nleaching - Nemission

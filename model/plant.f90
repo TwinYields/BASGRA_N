@@ -24,13 +24,13 @@ Subroutine Harvest(CLV,CRES,CST,year,doy,DAYS_HARVEST,LAI,PHEN,TILG1,TILG2,TILV,
   real    :: GSTUB, HARVLV, HARVLA, HARVRE, HARVTILG2, HARVST, HARVPH
   real    :: CLAI, HARVFR, TV1
   integer :: HARV,i
- 
+
   HARV   = 0
   NOHARV = 1
-  do i=1,100    
+  do i=1,100
     if ( (year==DAYS_HARVEST(i,1)) .and. (doy==DAYS_HARVEST(i,2)) ) then
       HARV   = 1
-      NOHARV = 0	
+      NOHARV = 0
 	end if
   end do
   FRACTV = (TILV+TILG1) / (TILV+TILG1+TILG2)
@@ -104,9 +104,9 @@ Subroutine LUECO2TM(PARAV)
   PMAX   = VCMAX * (CO2I-GAMMAX) / (CO2I + KMC * (1+O2/KMO)) !(micromol CO2 m-2 s-1)
   TMPFAC = max( 0., min( 1., (T+4.)/5. ) )                   !(-)
   EFF    = TMPFAC * (1/2.1) * (CO2I-GAMMAX) / (4.5*CO2I+10.5*GAMMAX) !(mol CO2 mol-1 PAR quanta)
-  LUEMXQ = EFF*PMAX*(1+KLUETILG*(1-FRACTV)) / (EFF*K*PARAV + PMAX)   !(mol CO2 mol-1 PAR quanta)  
+  LUEMXQ = EFF*PMAX*(1+KLUETILG*(1-FRACTV)) / (EFF*K*PARAV + PMAX)   !(mol CO2 mol-1 PAR quanta)
 end Subroutine LUECO2TM
-  
+
 Subroutine HardeningSink(CLV,DAYL,doy,LT50,Tsurf)
   integer :: doy
   real :: CLV,DAYL,LT50,Tsurf
@@ -115,7 +115,7 @@ Subroutine HardeningSink(CLV,DAYL,doy,LT50,Tsurf)
     reHardRedStart = modulo( reHardRedEnd       - reHardRedDay, 365. )
   else
     reHardRedStart = modulo( reHardRedEnd + 183 - reHardRedDay, 365. )
-  end if  
+  end if
   doySinceStart  = modulo( doy-reHardRedStart       , 365. )
   if ( doySinceStart < (reHardRedDay+0.5*(365.-reHardRedDay)) ) then
     reHardPeriod = max( 0., 1.-doySinceStart/reHardRedDay )
@@ -142,20 +142,20 @@ Subroutine Growth(LAI,NSH,NMIN,CLV,CRES,CST,PARINT,TILG1,TILG2,TILV,TRANRF, &
   RESPHARD = min(SOURCE,RESPHARDSI)
   ALLOTOT  = SOURCE - RESPHARD
   GRESSI   = 0.5 * (RESMOB + max(0.,(CRESMX-CRES)/DELT))
-  if (TILG2 /= 0.0) then 
-    CSTAV  = CST/TILG2 
-  else 
+  if (TILG2 /= 0.0) then
+    CSTAV  = CST/TILG2
+  else
     CSTAV  = 0.
   end if
   SINK1T   = max(0., 1 - (CSTAV/CSTAVM)) * SIMAX1T
-  NELLVG   = PHENRF * NELLVM 
+  NELLVG   = PHENRF * NELLVM
   GLAISI   = ((LERV*(TILV+TILG1)*NELLVM*LFWIDV)  + &
               (LERG*      TILG2 *NELLVG*LFWIDG)) * SHAPE * TRANRF
   GLVSI    = max(0., (GLAISI * NOHARV / SLANEW) / YG )
 !  GLVSI    = (GLAISI * NOHARV / SLANEW) / YG
   GSTSI    = max(0., (SINK1T * TILG2 * TRANRF * NOHARV) / YG )
 !  GSTSI    = (SINK1T * TILG2 * TRANRF * NOHARV) / YG
-  
+
   NSHK     = (CLV+CST)*NCSHMAX * (1.-exp(-K*LAI))/(K*LAI)
   NSHEXCESS = max( 0., NSH-NSHK )
   NSHmob   = NOHARV * NSHEXCESS / TCNSHMOB
@@ -179,7 +179,7 @@ end Subroutine Growth
      ! Situation 1: Growth has priority over storage (spring and growth period)
        ! Calculate amount of assimilates allocated to shoot
        ALLOSH = min( ALLOTOT, GSHSI )
-       ! Calculate amount of assimilates allocated to reserves    
+       ! Calculate amount of assimilates allocated to reserves
        GRES   = min( ALLOTOT - ALLOSH, GRESSI)
      else
      ! Situation 2: Storage has priority over shoot (autumn)
@@ -199,7 +199,7 @@ end Subroutine Growth
      RESPGSH = (ALLOLV + ALLOST) * (1-YG)
      RESPGRT =  ALLORT           * (1-YG)
    end Subroutine Allocation
-    
+
 Subroutine PlantRespiration(FO2,RESPHARD)
   real :: FO2,RESPHARD
   real :: fAer
@@ -216,8 +216,8 @@ Subroutine Senescence(CLV,CRT,CSTUB,LAI,LT50,PERMgas,TANAER,TILV,Tsurf, &
   call AnaerobicDamage(LT50,PERMgas,TANAER, dTANAER)
   call Hardening(CLV,LT50,Tsurf, DeHardRate,HardRate)
   if (LAI < LAICR) then
-    TV1 = 0.0 
-  else 
+    TV1 = 0.0
+  else
     TV1 = RDRSCO*(LAI-LAICR)/LAICR
   end if
   RDRS   = min(TV1, RDRSMX)
@@ -273,9 +273,9 @@ Subroutine Foliage2(DAYL,GLV,LAI,TILV,TILG1,TRANRF,Tsurf,VERN, GLAI,GTILV,TILVG1
   real    :: GLAI,GTILV,TILVG1,TILG1G2
   real    :: RGRTVG1,TGE,TV1
   GLAI    = SLANEW * GLV
-  if (Tsurf < TBASE) then 
-    TV1   = 0. 
-  else 
+  if (Tsurf < TBASE) then
+    TV1   = 0.
+  else
     TV1   = Tsurf/PHY
   end if
   RLEAF   = TV1 * NOHARV * TRANRF * DAYLGE * ( FRACTV + PHENRF*(1-FRACTV) ) * fNgrowth
@@ -319,7 +319,7 @@ Subroutine Nplant(NSHmob,CLV,CRT,CST,DLAI,DLV,DRT,GLAI,GLV,GRT,GST,HARVLA,HARVLV
       GNSH = fNCgrowth * NCSHMAX * (GLV+GST) * (1-exp(-KN*GLAI)) / (KN*GLAI)
 	else
 	  GNSH = fNCgrowth * NCSHMAX * (GLV+GST)
-    end if      
+    end if
 	NCGSH = GNSH / (GLV+GST)
   else
     GNSH  = 0
@@ -328,26 +328,27 @@ Subroutine Nplant(NSHmob,CLV,CRT,CST,DLAI,DLV,DRT,GLAI,GLV,GRT,GST,HARVLA,HARVLV
   if (DLAI > 0) then
     if (KN > 0) then
       DNSH = NSH * (CLV/(CLV+CST)) * (1 - (1-exp(-KN*(LAI-DLAI))) / (1-exp(-KN*LAI)) )
-	else
-	  DNSH = NSH * (CLV/(CLV+CST)) * DLAI/LAI
-    end if      
-	DNSH  = max( DNSH, NSH-NCSHMAX*((CLV+CST)-DLV) )
-	NCDSH = DNSH / DLV
+    else
+      DNSH = NSH * (CLV/(CLV+CST)) * DLAI/LAI
+    end if
+
+    DNSH  = max( DNSH, NSH-NCSHMAX*((CLV+CST)-DLV) )
+    NCDSH = DNSH / DLV
   else
-	DNSH  = 0
-	NCDSH = 0
+    DNSH  = 0
+    NCDSH = 0
   end if
   if (HARVLA > 0) then
     if (KN > 0) then
       HARVNSH = NSH * (1-exp(-KN*HARVLA)) / (1-exp(-KN*LAI))
-	else
-	  HARVNSH = NSH * HARVLA/LAI
-    end if      
-	HARVNSH  = max( HARVNSH, NSH-NCSHMAX*((CLV+CST)-(HARVLV+HARVST)) )
-	NCHARVSH = HARVNSH / (HARVLV+HARVST)
+    else
+      HARVNSH = NSH * HARVLA/LAI
+    end if
+	  HARVNSH  = max( HARVNSH, NSH-NCSHMAX*((CLV+CST)-(HARVLV+HARVST)) )
+	  NCHARVSH = HARVNSH / (HARVLV+HARVST)
   else
-    HARVNSH  = 0  
-	NCHARVSH = 0
+    HARVNSH  = 0
+	  NCHARVSH = 0
   end if
 !  GNRT = NCR * GRT
   GNRT = NCR * GRT * fNgrowth
@@ -369,7 +370,7 @@ Subroutine Digestibility(DM,DMLV,DMRES,DMSH,DMST,DMSTUB,PHEN, &
   F_WALL_LV_MIN     = F_WALL_LV_FMIN * F_WALL_LV_MAX
   F_WALL_ST_MIN     = F_WALL_ST_FMIN * F_WALL_ST_MAX
   F_WALL_LV         = F_WALL_LV_MIN + PHEN * ( F_WALL_LV_MAX - F_WALL_LV_MIN )
-  F_WALL_ST         = F_WALL_ST_MIN + PHEN * ( F_WALL_ST_MAX - F_WALL_ST_MIN )  
+  F_WALL_ST         = F_WALL_ST_MIN + PHEN * ( F_WALL_ST_MAX - F_WALL_ST_MIN )
   F_WALL_DM         = ( F_WALL_LV*DMLV + F_WALL_ST*DMST + DMSTUB ) / DM
   F_WALL_DMSH       = ( F_WALL_LV*DMLV + F_WALL_ST*DMST          ) / DMSH
   F_DIGEST_WALL_MIN = F_DIGEST_WALL_FMIN * F_DIGEST_WALL_MAX

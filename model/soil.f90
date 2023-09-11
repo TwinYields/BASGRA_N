@@ -34,10 +34,10 @@ Subroutine Physics(DAVTMP,Fdepth,ROOTD,Sdepth,WAS, Frate)
   else
     Tsurf = DAVTMP * exp(-gamma*Sdepth)
     fPerm = 1.
-  end if  
+  end if
   call Frozensoil(Fdepth,ROOTD,WAS, Frate)
 end Subroutine Physics
-  
+
    Subroutine FrozenSoil(Fdepth,ROOTD,WAS, Frate)
      real :: Fdepth,ROOTD,WAS
      real :: Frate
@@ -97,14 +97,14 @@ Subroutine O2status(O2,ROOTD)
   real :: O2,ROOTD
   FO2 = O2 / (ROOTD * FGAS * 1000./22.4)
 end Subroutine O2status
-  
+
 Subroutine O2fluxes(O2,PERMgas,ROOTD,RplantAer, O2IN,O2OUT)
   real :: O2,PERMgas,ROOTD,RplantAer
   real :: O2IN,O2OUT
   real :: O2MX
   O2OUT = RplantAer * KRTOTAER * 1./12. * 1.
   O2MX  = FO2MX * ROOTD * FGAS * 1000./22.4
-  O2IN  = PERMgas * ( (O2MX-O2) + O2OUT*DELT )  
+  O2IN  = PERMgas * ( (O2MX-O2) + O2OUT*DELT )
 end Subroutine O2fluxes
 
 Subroutine N_fert(year,doy,DAYS_FERT,NFERTV, Nfert)
@@ -113,7 +113,7 @@ Subroutine N_fert(year,doy,DAYS_FERT,NFERTV, Nfert)
   real   ,dimension(100  ) :: NFERTV
   real                     :: Nfert
   Nfert   = 0
-  do i=1,100    
+  do i=1,100
     if ( (year==DAYS_FERT (i,1)) .and. (doy==DAYS_FERT (i,2)) ) then
       Nfert   = NFERTV (i)
 	end if
@@ -142,7 +142,7 @@ Subroutine CNsoil(ROOTD,RWA,WFPS,WAL,GCR,CLITT,CSOMF,NLITT,NSOMF,NSOMS,NMIN,CSOM
   real :: CLITT, CSOMF, CSOMS, fN2O, GCR, NLITT, NMIN, NSOMF, NSOMS
   real :: ROOTD, RWA, WAL, WFPS
   ! Soil temperature effect
-  fTsoil = exp((Tsurf-10.)*(2.*TMAXF-Tsurf-10.)/(2.*TSIGMAF**2.)) 
+  fTsoil = exp((Tsurf-10.)*(2.*TMAXF-Tsurf-10.)/(2.*TSIGMAF**2.))
   ! C Litter
   rCLITT      = ((CLITT*RUNOFF) / ROOTD) * RRUNBULK * 0.001
   dCLITT      =  (CLITT*fTsoil) / TCLITT
@@ -181,7 +181,7 @@ Subroutine CNsoil(ROOTD,RWA,WFPS,WAL,GCR,CLITT,CSOMF,NLITT,NSOMF,NSOMS,NMIN,CSOM
   Nemission       =  NMIN * KNEMIT * RWA
   fN2O            = 1. / (1. + exp(-RFN2O*(WFPS-WFPS50N2O)))
   NemissionN2O    = Nemission *     fN2O
-  NemissionNO     = Nemission * (1.-fN2O) 
+  NemissionNO     = Nemission * (1.-fN2O)
 end Subroutine CNsoil
-  
+
 end module soil
