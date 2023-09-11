@@ -4,17 +4,17 @@ use parameters_site
 use parameters_plant
 implicit none
 integer, parameter :: NMAXDAYS = 10000
-real :: GR, TMMN, TMMX, VP, WN
-real :: YEARI(NMAXDAYS), DOYI(NMAXDAYS) , RAINI(NMAXDAYS), GRI(NMAXDAYS)
-real :: TMMNI(NMAXDAYS), TMMXI(NMAXDAYS), VPI(NMAXDAYS)  , WNI(NMAXDAYS)
+real*8:: GR, TMMN, TMMX, VP, WN
+real*8:: YEARI(NMAXDAYS), DOYI(NMAXDAYS) , RAINI(NMAXDAYS), GRI(NMAXDAYS)
+real*8:: TMMNI(NMAXDAYS), TMMXI(NMAXDAYS), VPI(NMAXDAYS)  , WNI(NMAXDAYS)
 
-real :: DAVTMP,DAYL,DTR,PAR,PERMgas,PEVAP,poolRUNOFF,PTRAN,pWater,RAIN,RNINTC
-real :: runOn,StayWet,WmaxStore,Wsupply
+real*8:: DAVTMP,DAYL,DTR,PAR,PERMgas,PEVAP,poolRUNOFF,PTRAN,pWater,RAIN,RNINTC
+real*8:: runOn,StayWet,WmaxStore,Wsupply
 
 Contains
   Subroutine set_weather_day(day,DRYSTOR, year,doy)
     integer :: day, doy, year
-    real    :: DRYSTOR
+    real*8   :: DRYSTOR
     year   = YEARI(day) ! day of the year (d)
     doy    = DOYI(day)  ! day of the year (d)
     RAIN   = RAINI(day) ! precipitation (mm d-1)
@@ -31,8 +31,8 @@ Contains
 Subroutine MicroClimate(doy,DRYSTOR,Fdepth,Frate,LAI,Sdepth,Tsurf,WAPL,WAPS,WETSTOR, &
           FREEZEPL,INFIL,PackMelt,poolDrain,poolInfil,pSnow,reFreeze,SnowMelt,THAWPS,wRemain)
   integer :: doy
-  real :: DRYSTOR,Fdepth,Frate,LAI,Sdepth,Tsurf,WAPL,WAPS,WETSTOR
-  real :: FREEZEPL,INFIL,PackMelt,poolDrain,poolInfil,pSnow,reFreeze,SnowMelt,THAWPS,wRemain
+  real*8:: DRYSTOR,Fdepth,Frate,LAI,Sdepth,Tsurf,WAPL,WAPS,WETSTOR
+  real*8:: FREEZEPL,INFIL,PackMelt,poolDrain,poolInfil,pSnow,reFreeze,SnowMelt,THAWPS,wRemain
   call RainSnowSurfacePool(doy,DRYSTOR,Fdepth,Frate,LAI,Sdepth,Tsurf,WAPL,WAPS,WETSTOR, &
        FREEZEPL,INFIL,PackMelt,poolDrain,poolInfil,pSnow,reFreeze,SnowMelt,THAWPS,Wremain)
   if (WAPS == 0.) then
@@ -45,9 +45,9 @@ end Subroutine MicroClimate
    Subroutine RainSnowSurfacePool(doy,DRYSTOR,Fdepth,Frate,LAI,Sdepth,Tsurf,WAPL,WAPS,WETSTOR, &
        FREEZEPL,INFIL,PackMelt,poolDrain,poolInfil,pSnow,reFreeze,SnowMelt,THAWPS,Wremain)
      integer :: doy
-     real :: DRYSTOR,Fdepth,Frate,LAI,Sdepth,Tsurf,WAPL,WAPS,WETSTOR
-     real :: FREEZEPL,INFIL,PackMelt,poolDrain,poolInfil,pSnow,reFreeze,SnowMelt,THAWPS,Wremain
-     real :: PINFIL
+     real*8:: DRYSTOR,Fdepth,Frate,LAI,Sdepth,Tsurf,WAPL,WAPS,WETSTOR
+     real*8:: FREEZEPL,INFIL,PackMelt,poolDrain,poolInfil,pSnow,reFreeze,SnowMelt,THAWPS,Wremain
+     real*8:: PINFIL
      call precForm(Psnow)
      call WaterSnow(doy,DRYSTOR,Psnow,Sdepth,WETSTOR, PackMelt,reFreeze,SnowMelt,Wremain)
      RNINTC = min( Wsupply, 0.25*LAI )
@@ -58,7 +58,7 @@ end Subroutine MicroClimate
    end Subroutine RainSnowSurfacePool
 
       Subroutine precForm(Psnow)
-        real :: Psnow
+        real*8:: Psnow
         if (DAVTMP > TrainSnow) then
           Pwater = RAIN
           Psnow  = 0.
@@ -71,9 +71,9 @@ end Subroutine MicroClimate
       Subroutine WaterSnow(doy,DRYSTOR,Psnow,Sdepth,WETSTOR, &
                                              PackMelt,reFreeze,SnowMelt,Wremain)
         integer :: doy
-        real :: DRYSTOR,Psnow,Sdepth,WETSTOR
-        real :: PackMelt,reFreeze,SnowMelt,Wremain
-        real :: DENSITY
+        real*8:: DRYSTOR,Psnow,Sdepth,WETSTOR
+        real*8:: PackMelt,reFreeze,SnowMelt,Wremain
+        real*8:: DENSITY
         call SnowMeltWmaxStore      (doy,DRYSTOR,             SnowMelt)
         call WETSTORdynamics        (WETSTOR,                 reFreeze)
         call LiquidWaterDistribution(SnowMelt,                Wremain)
@@ -83,9 +83,9 @@ end Subroutine MicroClimate
 
          Subroutine SnowMeltWmaxStore(doy,DRYSTOR, SnowMelt)
            integer :: doy
-           real :: DRYSTOR
-           real :: SnowMelt
-           real :: Melt
+           real*8:: DRYSTOR
+           real*8:: SnowMelt
+           real*8:: Melt
 !           Melt = Bias + Ampl * sin( Freq * (doy-(174.-91.)) )
            Melt = Bias + Ampl * DAYL
            if (DAVTMP > TmeltFreeze) then
@@ -97,9 +97,9 @@ end Subroutine MicroClimate
          end Subroutine SnowMeltWmaxStore
 
          Subroutine WETSTORdynamics(WETSTOR, reFreeze)
-           real :: WETSTOR
-           real :: reFreeze
-           real :: reFreezeMax
+           real*8:: WETSTOR
+           real*8:: reFreeze
+           real*8:: reFreezeMax
            reFreezeMax = SWrf * (TmeltFreeze-DAVTMP)
            if ((WETSTOR>0).and.(DAVTMP<TmeltFreeze)) then
              reFreeze = min(WETSTOR/DELT,reFreezeMax)
@@ -110,18 +110,18 @@ end Subroutine MicroClimate
          end Subroutine WETSTORdynamics
 
          Subroutine LiquidWaterDistribution(SnowMelt, Wremain)
-           real :: SnowMelt
-           real :: Wremain
-           real :: Wavail
+           real*8:: SnowMelt
+           real*8:: Wremain
+           real*8:: Wavail
            Wavail  = StayWet + SnowMelt + Pwater
            Wremain = min(Wavail,WmaxStore)
            Wsupply = Wavail - Wremain
          end Subroutine LiquidWaterDistribution
 
          Subroutine SnowDensity(DRYSTOR,Sdepth,WETSTOR, DENSITY)
-           real :: DRYSTOR,Sdepth,WETSTOR
-           real :: DENSITY
-           real :: SWE
+           real*8:: DRYSTOR,Sdepth,WETSTOR
+           real*8:: DENSITY
+           real*8:: SWE
            SWE = DRYSTOR + WETSTOR
            if (Sdepth > 0.) then
              DENSITY = min(480., SWE/Sdepth)
@@ -131,8 +131,8 @@ end Subroutine MicroClimate
          end Subroutine SnowDensity
 
          Subroutine SnowDepthDecrease(DENSITY,Sdepth,SnowMelt, PackMelt)
-           real :: DENSITY,Sdepth,SnowMelt
-           real :: PackMelt
+           real*8:: DENSITY,Sdepth,SnowMelt
+           real*8:: PackMelt
            if (Sdepth > 0.) then
              PackMelt = max(0.,min( Sdepth/DELT, Sdepth*RHOpack - SnowMelt/DENSITY ))
            else
@@ -141,8 +141,8 @@ end Subroutine MicroClimate
          end Subroutine SnowDepthDecrease
 
       Subroutine INFILrunOn(Fdepth,PINFIL, INFIL)
-        real :: Fdepth,PINFIL
-        real :: INFIL
+        real*8:: Fdepth,PINFIL
+        real*8:: INFIL
         if (Fdepth <= poolInfilLimit) then
           INFIL = PINFIL
         else
@@ -153,9 +153,9 @@ end Subroutine MicroClimate
 
       Subroutine SurfacePool(Fdepth,Frate,Tsurf,WAPL,WAPS, &
                                             FREEZEPL,poolDrain,poolInfil,THAWPS)
-        real :: Fdepth,Frate,Tsurf,WAPL,WAPS
-        real :: FREEZEPL,poolDrain,poolInfil,THAWPS
-        real :: eta,PIrate,poolVolRemain,poolWavail
+        real*8:: Fdepth,Frate,Tsurf,WAPL,WAPS
+        real*8:: FREEZEPL,poolDrain,poolInfil,THAWPS
+        real*8:: eta,PIrate,poolVolRemain,poolWavail
         poolVolRemain = max(0., WpoolMax - WAPL - WAPS)
         poolInfil     = min(runOn,poolVolRemain)
         poolRUNOFF    = runOn - poolInfil
@@ -188,7 +188,7 @@ Subroutine DDAYL(doy)
 ! Author - Marcel van Oijen (CEH-Edinburgh) & Simon Woodward (DairyNZ)
 !=============================================================================
   integer :: doy                                                      ! (d)
-  real    :: DEC, DECLIM, DECC, RAD
+  real*8   :: DEC, DECLIM, DECC, RAD
   RAD  = pi / 180.                                                    ! (radians deg-1)
   DEC  = -asin (sin (23.45*RAD)*cos (2.*pi*(doy+10.)/365.))           ! (radians)
   if (LAT==0) then
@@ -208,9 +208,9 @@ Subroutine PENMAN(LAI)
 ! Outputs: PEVAP & PTRAN (mm d-1)
 ! Author - Marcel van Oijen (CEH-Edinburgh)
 !=============================================================================
-  real :: LAI
-  real :: BBRAD, BOLTZM, DTRJM2, LHVAP, NRADC, NRADS
-  real :: PENMD, PENMRC, PENMRS, PSYCH, RLWN, SLOPE, SVP, WDF
+  real*8:: LAI
+  real*8:: BBRAD, BOLTZM, DTRJM2, LHVAP, NRADC, NRADS
+  real*8:: PENMD, PENMRC, PENMRS, PSYCH, RLWN, SLOPE, SVP, WDF
   DTRJM2 = DTR * 1.E6                                    ! (J GR m-2 d-1)
   BOLTZM = 5.668E-8                                      ! (J m-2 s-1 K-4)
   LHVAP  = 2.4E6                                         ! (J kg-1)

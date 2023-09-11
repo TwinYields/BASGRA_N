@@ -28,47 +28,47 @@ integer, dimension(100,2) :: DAYS_HARVEST
 
 
 
-real                      :: PARAMS(120)
+real*8                     :: PARAMS(120)
 integer, parameter      :: NWEATHER =  8
-real                      :: MATRIX_WEATHER(NMAXDAYS,NWEATHER)
-real   , dimension(100,3) :: CALENDAR_FERT, CALENDAR_NDEP
+real*8                     :: MATRIX_WEATHER(NMAXDAYS,NWEATHER)
+real*8  , dimension(100,3) :: CALENDAR_FERT, CALENDAR_NDEP
 integer, dimension(100,2) :: DAYS_FERT    , DAYS_NDEP
-real   , dimension(100)   :: NFERTV       , NDEPV
+real*8  , dimension(100)   :: NFERTV       , NDEPV
 
 integer                   :: day, doy, i, NDAYS, NOUT, year
-real                      :: y(NDAYS,NOUT)
+real*8                     :: y(NDAYS,NOUT)
 
 ! State variables plants
-real    :: CLV, CLVD, CRES, CRT, CST, CSTUB, LAI, LT50, PHEN
-real    :: ROOTD, TILG1, TILG2, TILV
+real*8   :: CLV, CLVD, CRES, CRT, CST, CSTUB, LAI, LT50, PHEN
+real*8   :: ROOTD, TILG1, TILG2, TILV
 integer :: VERN
-real    :: YIELD, YIELD_LAST, YIELD_TOT
-real    :: NRT, NSH
+real*8   :: YIELD, YIELD_LAST, YIELD_TOT
+real*8   :: NRT, NSH
 
 ! Output variables constructed from plant state variables
-real    :: DM, DMLV, DMRES, DMSH, DMST, DMSTUB, DM_MAX, TILTOT
-real    :: NSH_DMSH
-real    :: ENERGY_DM, F_ASH, F_PROTEIN, PROTEIN
+real*8   :: DM, DMLV, DMRES, DMSH, DMST, DMSTUB, DM_MAX, TILTOT
+real*8   :: NSH_DMSH
+real*8   :: ENERGY_DM, F_ASH, F_PROTEIN, PROTEIN
 
 ! State variables soil
-real    :: CLITT, CSOMF, CSOMS, DRYSTOR, Fdepth
-real    :: NLITT, NSOMF, NSOMS, NMIN, O2, Sdepth
-real    :: TANAER, WAL, WAPL, WAPS, WAS, WETSTOR
-real    :: Nfert_TOT
+real*8   :: CLITT, CSOMF, CSOMS, DRYSTOR, Fdepth
+real*8   :: NLITT, NSOMF, NSOMS, NMIN, O2, Sdepth
+real*8   :: TANAER, WAL, WAPL, WAPS, WAS, WETSTOR
+real*8   :: Nfert_TOT
 
 ! Intermediate and rate variables
-real :: DeHardRate, DLAI, DLV, DPHEN, DRT, DSTUB, dTANAER, DTILV, EVAP, EXPLOR
-real :: Frate, FREEZEL, FREEZEPL, GLAI, GLV, GPHEN, GRES, GRT, GST, GSTUB, GTILV, HardRate
-real :: HARVLA, HARVLV, HARVPH, HARVRE, HARVST, HARVTILG2, INFIL, IRRIG, O2IN
-real :: O2OUT, PackMelt, poolDrain, poolInfil, Psnow, reFreeze, RESMOB
-real :: RGRTVG1, RROOTD, SnowMelt, THAWPS, THAWS, TILVG1, TILG1G2, TRAN, Wremain
-real :: NCSHI, NCGSH, NCDSH, NCHARVSH, GNSH, DNSH, HARVNSH, GNRT, DNRT
-real :: NSHmob, NSHmobsoil, Nupt
+real*8:: DeHardRate, DLAI, DLV, DPHEN, DRT, DSTUB, dTANAER, DTILV, EVAP, EXPLOR
+real*8:: Frate, FREEZEL, FREEZEPL, GLAI, GLV, GPHEN, GRES, GRT, GST, GSTUB, GTILV, HardRate
+real*8:: HARVLA, HARVLV, HARVPH, HARVRE, HARVST, HARVTILG2, INFIL, IRRIG, O2IN
+real*8:: O2OUT, PackMelt, poolDrain, poolInfil, Psnow, reFreeze, RESMOB
+real*8:: RGRTVG1, RROOTD, SnowMelt, THAWPS, THAWS, TILVG1, TILG1G2, TRAN, Wremain
+real*8:: NCSHI, NCGSH, NCDSH, NCHARVSH, GNSH, DNSH, HARVNSH, GNRT, DNRT
+real*8:: NSHmob, NSHmobsoil, Nupt
 
-real :: Ndep, Nfert
+real*8:: Ndep, Nfert
 
-real :: F_DIGEST_DM, F_DIGEST_DMSH, F_DIGEST_LV, F_DIGEST_ST, F_DIGEST_WALL
-real :: F_WALL_DM  , F_WALL_DMSH  , F_WALL_LV  , F_WALL_ST
+real*8:: F_DIGEST_DM, F_DIGEST_DMSH, F_DIGEST_LV, F_DIGEST_ST, F_DIGEST_WALL
+real*8:: F_WALL_DM  , F_WALL_DMSH  , F_WALL_LV  , F_WALL_ST
 
 ! Parameters
 call set_params(PARAMS)

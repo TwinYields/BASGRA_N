@@ -4,34 +4,34 @@ module parameters_site
   real, parameter       :: DELT   =   1.0
 
 ! Geography
-  real                  :: LAT
+  real*8                 :: LAT
 
 ! Atmospheric conditions
-  real, parameter       :: CO2A   = 350   
+  real, parameter       :: CO2A   = 350
 
 ! Soil
   real, parameter       :: DRATE  =  50
-  real                  :: WCI
-  real                  :: FWCAD, FWCWP, FWCFC, FWCWET, WCST
-  real                  ::  WCAD,  WCWP,  WCFC,  WCWET
+  real*8                 :: WCI
+  real*8                 :: FWCAD, FWCWP, FWCFC, FWCWET, WCST
+  real*8                 ::  WCAD,  WCWP,  WCFC,  WCWET
   real, parameter       :: KNFIX = 0, RRUNBULK = 0.05
 
 ! Soil - WINTER PARAMETERS
-  real                  :: FGAS, FO2MX, gamma, KRTOTAER, KSNOW
+  real*8                 :: FGAS, FO2MX, gamma, KRTOTAER, KSNOW
   real, parameter       :: LAMBDAice      = 1.9354e+005
-  real                  :: LAMBDAsoil
+  real*8                 :: LAMBDAsoil
   real, parameter       :: LatentHeat     = 335000.
   real, parameter       :: poolInfilLimit =      0.2
-  real                  :: RHOnewSnow, RHOpack
+  real*8                 :: RHOnewSnow, RHOpack
   real, parameter       :: RHOwater       =   1000.
-  real                  :: SWret, SWrf, TmeltFreeze, TrainSnow
-  real                  :: WpoolMax
-  
+  real*8                 :: SWret, SWrf, TmeltFreeze, TrainSnow
+  real*8                 :: WpoolMax
+
 ! Soil initial values (parameters)
-real :: CLITT0, CSOM0, CNLITT0, CNSOMF0, CNSOMS0, FCSOMF0, NMIN0
-real :: FLITTSOMF, FSOMFSOMS, RNLEACH, KNEMIT
-real :: TCLITT, TCSOMF, TCSOMS, TMAXF, TSIGMAF, RFN2O
-real :: WFPS50N2O
+real*8:: CLITT0, CSOM0, CNLITT0, CNSOMF0, CNSOMS0, FCSOMF0, NMIN0
+real*8:: FLITTSOMF, FSOMFSOMS, RNLEACH, KNEMIT
+real*8:: TCLITT, TCSOMF, TCSOMS, TMAXF, TSIGMAF, RFN2O
+real*8:: WFPS50N2O
 
 ! Soil initial constants
   real, parameter       :: DRYSTORI = 0.
@@ -42,7 +42,7 @@ real :: WFPS50N2O
   real, parameter       :: WAPSI    = 0.
   real, parameter       :: WASI     = 0.
   real, parameter       :: WETSTORI = 0.
-  
+
 ! Management: harvest dates and irrigation
   integer, dimension(3) :: doyHA
   real, parameter       :: IRRIGF = 0.
@@ -53,9 +53,9 @@ real :: WFPS50N2O
   real, parameter       :: Kmin = 4.
   real, parameter       :: Ampl = 0.625
   real, parameter       :: Bias = Kmin + Ampl
-  
+
 ! SA parameters
-  real                  :: NFERTMULT
+  real*8                 :: NFERTMULT
 
 end module parameters_site
 

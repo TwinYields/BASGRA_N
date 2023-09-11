@@ -4,13 +4,13 @@ use parameters_site
 use parameters_plant
 implicit none
 
-real :: DTRINT,PARAV,PARINT,TRANRF
-real :: RWA, WFPS
+real*8:: DTRINT,PARAV,PARINT,TRANRF
+real*8:: RWA, WFPS
 
 Contains
 
 Subroutine Light(DAYL,DTR,LAI,PAR)
-  real :: DAYL,DTR,LAI,PAR
+  real*8:: DAYL,DTR,LAI,PAR
   if (DAYL > 0) then
     PARAV = PAR * (1E6/(24*3600)) / DAYL
   else
@@ -19,10 +19,10 @@ Subroutine Light(DAYL,DTR,LAI,PAR)
   PARINT = PAR * (1 - exp(-1.0*K*LAI))
   DTRINT = DTR * (1 - exp(-0.75*K*LAI))
 end Subroutine Light
-  
+
 Subroutine EVAPTRTRF(Fdepth,PEVAP,PTRAN,ROOTD,WAL, EVAP,TRAN)
-  real :: Fdepth, PEVAP, PTRAN, ROOTD, WAL, EVAP, TRAN
-  real :: AVAILF, FR, WAAD, WCL, WCCR
+  real*8:: Fdepth, PEVAP, PTRAN, ROOTD, WAL, EVAP, TRAN
+  real*8:: AVAILF, FR, WAAD, WCL, WCCR
   if (Fdepth < ROOTD) then
     WCL = WAL*0.001 / (ROOTD-Fdepth)
   else
@@ -34,15 +34,15 @@ Subroutine EVAPTRTRF(Fdepth,PEVAP,PTRAN,ROOTD,WAL, EVAP,TRAN)
   EVAP = PEVAP * RWA                                            ! (mm d-1)
   WCCR = WCWP + max( 0.01, PTRAN/(PTRAN+TRANCO) * (WCFC-WCWP) ) ! (m3 m-3)
   if (WCL > WCCR) then
-    FR = max(0., min(1., (WCST-WCL)/(WCST-WCWET) ))              
+    FR = max(0., min(1., (WCST-WCL)/(WCST-WCWET) ))
   else
-    FR = max(0., min(1., (WCL-WCWP)/(WCCR-WCWP)  ))              
+    FR = max(0., min(1., (WCL-WCWP)/(WCCR-WCWP)  ))
   end if                                                        ! (mm mm-1)
   TRAN = PTRAN * FR                                             ! (mm d-1)
   if (EVAP+TRAN > 0.) then
-    AVAILF = min( 1., ((WAL-WAAD)/DELT) / (EVAP+TRAN) )         
+    AVAILF = min( 1., ((WAL-WAAD)/DELT) / (EVAP+TRAN) )
   else
-    AVAILF = 0                                                
+    AVAILF = 0
   end if                                                        ! (mm mm-1)
   EVAP = EVAP * AVAILF                                          ! (mm d-1)
   TRAN = TRAN * AVAILF                                          ! (mm d-1)
@@ -54,9 +54,9 @@ Subroutine EVAPTRTRF(Fdepth,PEVAP,PTRAN,ROOTD,WAL, EVAP,TRAN)
 end Subroutine EVAPTRTRF
 
 Subroutine ROOTDG(Fdepth,ROOTD,WAL, EXPLOR,RROOTD)
-  real :: Fdepth,ROOTD,WAL
-  real :: EXPLOR,RROOTD
-  real :: WCL  
+  real*8:: Fdepth,ROOTD,WAL
+  real*8:: EXPLOR,RROOTD
+  real*8:: WCL
   if (Fdepth < ROOTD) then
     WCL = WAL*0.001 / (ROOTD-Fdepth)
   else

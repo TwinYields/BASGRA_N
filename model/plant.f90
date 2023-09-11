@@ -6,13 +6,13 @@ use environment
 implicit none
 
 integer :: NOHARV
-real :: CRESMX,DAYLGE,FRACTV,GLVSI,GSTSI,LERG,LERV,LUEMXQ,NELLVG,PHENRF,PHOT
-real :: RDRFROST,RDRS,RDRT,RDRTOX,RESPGRT,RESPGSH,RESPHARD,RESPHARDSI,RESNOR,RLEAF,RplantAer,SLANEW
-real :: RATEH,reHardPeriod,TV2TIL
-real :: fNCgrowth,fNgrowth,FSPOT,KN,KNMAX,NSHNOR,RGRTV
-real :: NSHK
-real :: GLAISI, SINK1T
-real :: NSOURCE, NSINK
+real*8 :: CRESMX,DAYLGE,FRACTV,GLVSI,GSTSI,LERG,LERV,LUEMXQ,NELLVG,PHENRF,PHOT
+real*8 :: RDRFROST,RDRS,RDRT,RDRTOX,RESPGRT,RESPGSH,RESPHARD,RESPHARDSI,RESNOR,RLEAF,RplantAer,SLANEW
+real*8 :: RATEH,reHardPeriod,TV2TIL
+real*8 :: fNCgrowth,fNgrowth,FSPOT,KN,KNMAX,NSHNOR,RGRTV
+real*8 :: NSHK
+real*8 :: GLAISI, SINK1T
+real*8 :: NSOURCE, NSINK
 
 Contains
 
@@ -20,9 +20,9 @@ Subroutine Harvest(CLV,CRES,CST,year,doy,DAYS_HARVEST,LAI,PHEN,TILG1,TILG2,TILV,
                              GSTUB,HARVLA,HARVLV,HARVPH,HARVRE,HARVST,HARVTILG2)
   integer :: doy,year
   integer,dimension(100,2) :: DAYS_HARVEST
-  real    :: CLV, CRES, CST, LAI, PHEN, TILG1, TILG2, TILV
-  real    :: GSTUB, HARVLV, HARVLA, HARVRE, HARVTILG2, HARVST, HARVPH
-  real    :: CLAI, HARVFR, TV1
+  real*8    :: CLV, CRES, CST, LAI, PHEN, TILG1, TILG2, TILV
+  real*8    :: GSTUB, HARVLV, HARVLA, HARVRE, HARVTILG2, HARVST, HARVPH
+  real*8    :: CLAI, HARVFR, TV1
   integer :: HARV,i
 
   HARV   = 0
@@ -51,14 +51,14 @@ Subroutine Harvest(CLV,CRES,CST,year,doy,DAYS_HARVEST,LAI,PHEN,TILG1,TILG2,TILV,
 end Subroutine Harvest
 
 Subroutine Biomass(CLV,CRES,CST)
-  real :: CLV, CRES, CST
+  real*8 :: CLV, CRES, CST
   CRESMX = COCRESMX*(CLV + CRES + CST)
   RESNOR = max(0.,min(1., CRES/CRESMX ))
 end Subroutine Biomass
 
 Subroutine Phenology(DAYL,PHEN, DPHEN,GPHEN)
-  real :: DAYL,PHEN
-  real :: DPHEN,GPHEN
+  real*8 :: DAYL,PHEN
+  real*8 :: DPHEN,GPHEN
   GPHEN = max(0., (DAVTMP-0.01)*0.000144*24. * (min(DAYLP,DAYL)-0.24) )
   DPHEN = 0.
   if (DAYL < DAYLB) DPHEN = PHEN / DELT
@@ -69,7 +69,7 @@ Subroutine Phenology(DAYL,PHEN, DPHEN,GPHEN)
 end Subroutine Phenology
 
 Subroutine Foliage1
-  real :: EFFTMP, SLAMIN
+  real*8 :: EFFTMP, SLAMIN
   EFFTMP = max(TBASE, DAVTMP)
   LERV   =          max(0., (-0.76 + 0.52*EFFTMP)/1000. )
   LERG   = DAYLGE * max(0., (-5.46 + 2.80*EFFTMP)/1000. )
@@ -82,9 +82,9 @@ Subroutine LUECO2TM(PARAV)
 ! Calculate LUEMXQ (mol CO2 mol-1 PAR quanta)
 ! Inputs : PARAV (micromol PAR quanta m-2 s-)
 !=============================================================================
-  real :: PARAV
-  real :: CO2I, EA, EAKMC, EAKMO, EAVCMX, EFF, GAMMAX, KC25, KMC, KMC25
-  real :: KMO, KMO25, KOKC, O2, PMAX, R, RUBISCN, T, TMPFAC, VCMAX
+  real*8 :: PARAV
+  real*8 :: CO2I, EA, EAKMC, EAKMO, EAVCMX, EFF, GAMMAX, KC25, KMC, KMC25
+  real*8 :: KMO, KMO25, KOKC, O2, PMAX, R, RUBISCN, T, TMPFAC, VCMAX
   T      = DAVTMP                                            !(degC)
   RUBISCN = RUBISC * (1.E6/550000.)
   EAVCMX =  68000                                            !(J mol-1)
@@ -109,8 +109,8 @@ end Subroutine LUECO2TM
 
 Subroutine HardeningSink(CLV,DAYL,doy,LT50,Tsurf)
   integer :: doy
-  real :: CLV,DAYL,LT50,Tsurf
-  real :: doySinceStart, reHardRedStart
+  real*8 :: CLV,DAYL,LT50,Tsurf
+  real*8 :: doySinceStart, reHardRedStart
   if( LAT > 0 ) then
     reHardRedStart = modulo( reHardRedEnd       - reHardRedDay, 365. )
   else
@@ -132,10 +132,10 @@ end Subroutine HardeningSink
 
 Subroutine Growth(LAI,NSH,NMIN,CLV,CRES,CST,PARINT,TILG1,TILG2,TILV,TRANRF, &
                   GLV,GRES,GRT,GST,RESMOB,NSHmob)
-  real :: LAI,NSH,NMIN,CLV,CRES,CST,PARINT,TILG1,TILG2,TILV,TRANRF
-  real :: GLV,GRES,GRT,GST,RESMOB,NSHmob
-  real :: ALLOTOT,CSTAV,GRESSI,SOURCE
-  real :: NSHEXCESS
+  real*8 :: LAI,NSH,NMIN,CLV,CRES,CST,PARINT,TILG1,TILG2,TILV,TRANRF
+  real*8 :: GLV,GRES,GRT,GST,RESMOB,NSHmob
+  real*8 :: ALLOTOT,CSTAV,GRESSI,SOURCE
+  real*8 :: NSHEXCESS
   PHOT     = PARINT * TRANRF * 12. * LUEMXQ * NOHARV
   RESMOB   = (CRES * NOHARV / TCRES) * max(0.,min( 1.,DAVTMP/5. ))
   SOURCE   = RESMOB + PHOT
@@ -171,9 +171,9 @@ Subroutine Growth(LAI,NSH,NMIN,CLV,CRES,CST,PARINT,TILG1,TILG2,TILV,TRANRF, &
 end Subroutine Growth
 
    Subroutine Allocation(ALLOTOT,GRESSI, GRES,GRT,GLV,GST)
-     real :: ALLOTOT, GRESSI
-     real :: GRES, GRT, GLV, GST
-     real :: GSHSI, ALLOSH, ALLORT, ALLOLV, ALLOST
+     real*8 :: ALLOTOT, GRESSI
+     real*8 :: GRES, GRT, GLV, GST
+     real*8 :: GSHSI, ALLOSH, ALLORT, ALLOLV, ALLOST
      GSHSI = GLVSI + GSTSI
      if (DAYLGE >= 0.1) then
      ! Situation 1: Growth has priority over storage (spring and growth period)
@@ -201,8 +201,8 @@ end Subroutine Growth
    end Subroutine Allocation
 
 Subroutine PlantRespiration(FO2,RESPHARD)
-  real :: FO2,RESPHARD
-  real :: fAer
+  real*8 :: FO2,RESPHARD
+  real*8 :: fAer
   fAer      = max(0.,min(1., FO2/FO2MX ))
   RplantAer = fAer * ( RESPGRT + RESPGSH + RESPHARD )
 end Subroutine PlantRespiration
@@ -210,9 +210,9 @@ end Subroutine PlantRespiration
 Subroutine Senescence(CLV,CRT,CSTUB,LAI,LT50,PERMgas,TANAER,TILV,Tsurf, &
                       DeHardRate,DLAI,DLV,DRT,DSTUB,dTANAER,DTILV,HardRate)
   integer :: doy
-  real :: CLV,CRT,CSTUB,DAYL,LAI,LT50,PERMgas,TANAER,TILV,Tsurf
-  real :: DeHardRate,DLAI,DLV,DRT,DSTUB,dTANAER,DTILV,HardRate
-  real :: TV1, TV2
+  real*8 :: CLV,CRT,CSTUB,DAYL,LAI,LT50,PERMgas,TANAER,TILV,Tsurf
+  real*8 :: DeHardRate,DLAI,DLV,DRT,DSTUB,dTANAER,DTILV,HardRate
+  real*8 :: TV1, TV2
   call AnaerobicDamage(LT50,PERMgas,TANAER, dTANAER)
   call Hardening(CLV,LT50,Tsurf, DeHardRate,HardRate)
   if (LAI < LAICR) then
@@ -233,8 +233,8 @@ Subroutine Senescence(CLV,CRT,CSTUB,LAI,LT50,PERMgas,TANAER,TILV,Tsurf, &
 end Subroutine Senescence
 
    Subroutine AnaerobicDamage(LT50,PERMgas,TANAER, dTANAER)
-     real :: LT50,PERMgas,TANAER
-     real :: dTANAER,LD50
+     real*8 :: LT50,PERMgas,TANAER
+     real*8 :: dTANAER,LD50
      if (PERMgas==0.) then
        dTANAER = 1.
      else
@@ -249,9 +249,9 @@ end Subroutine Senescence
      end Subroutine AnaerobicDamage
 
    Subroutine Hardening(CLV,LT50,Tsurf, DeHardRate,HardRate)
-     real :: CLV,LT50,Tsurf
-     real :: DeHardRate,HardRate
-     real :: RATED,RSR3H,RSRDAY
+     real*8 :: CLV,LT50,Tsurf
+     real*8 :: DeHardRate,HardRate
+     real*8 :: RATED,RSR3H,RSRDAY
      RSR3H      = 1. / (1.+exp(-KRSR3H*(Tsurf-LT50)))
      ! RDRFROST should be less than 1 to avoid numerical problems
      ! (loss of all biomass but keeping positive reserves). We cap it at 0.5.
@@ -268,10 +268,10 @@ end Subroutine Senescence
    end Subroutine Hardening
 
 Subroutine Foliage2(DAYL,GLV,LAI,TILV,TILG1,TRANRF,Tsurf,VERN, GLAI,GTILV,TILVG1,TILG1G2)
-  real    :: DAYL,GLV,LAI,TILV,TILG1,TRANRF,Tsurf
+  real*8    :: DAYL,GLV,LAI,TILV,TILG1,TRANRF,Tsurf
   integer :: VERN
-  real    :: GLAI,GTILV,TILVG1,TILG1G2
-  real    :: RGRTVG1,TGE,TV1
+  real*8    :: GLAI,GTILV,TILVG1,TILG1G2
+  real*8    :: RGRTVG1,TGE,TV1
   GLAI    = SLANEW * GLV
   if (Tsurf < TBASE) then
     TV1   = 0.
@@ -297,10 +297,10 @@ end Subroutine Foliage2
 Subroutine Nplant(NSHmob,CLV,CRT,CST,DLAI,DLV,DRT,GLAI,GLV,GRT,GST,HARVLA,HARVLV,HARVST, &
                   LAI,NRT,NSH, &
                   DNRT,DNSH,GNRT,GNSH,HARVNSH,NCDSH,NCGSH,NCHARVSH,NSHmobsoil,Nupt)
-  real :: NSHmob,CLV,CRT,CST,DLAI,DLV,DRT,GLAI,GLV,GRT,GST,HARVLA,HARVLV,HARVST
-  real :: LAI,NRT,NSH
-  real :: DNRT,DNSH,GNRT,GNSH,HARVNSH,NCDSH,NCGSH,NCHARVSH,NSHmobsoil,Nupt
-  real :: GNmob
+  real*8 :: NSHmob,CLV,CRT,CST,DLAI,DLV,DRT,GLAI,GLV,GRT,GST,HARVLA,HARVLV,HARVST
+  real*8 :: LAI,NRT,NSH
+  real*8 :: DNRT,DNSH,GNRT,GNSH,HARVNSH,NCDSH,NCGSH,NCHARVSH,NSHmobsoil,Nupt
+  real*8 :: GNmob
   NSHNOR = NSH / ((CLV+CST)*NCSHMAX)
   if(NSHNOR*LAI > 0) then
     KNMAX  = 1./(NSHNOR*LAI)
@@ -363,10 +363,10 @@ end Subroutine Nplant
 Subroutine Digestibility(DM,DMLV,DMRES,DMSH,DMST,DMSTUB,PHEN, &
                          F_WALL_DM,F_WALL_DMSH,F_WALL_LV,F_WALL_ST, &
                          F_DIGEST_DM,F_DIGEST_DMSH,F_DIGEST_LV,F_DIGEST_ST,F_DIGEST_WALL)
-  real :: PHEN,DMLV,DMST,DMSTUB,DM,DMSH,DMRES
-  real :: F_WALL_DM,F_WALL_DMSH,F_WALL_LV,F_WALL_ST
-  real :: F_DIGEST_DM,F_DIGEST_DMSH,F_DIGEST_LV,F_DIGEST_ST,F_DIGEST_WALL
-  real :: F_DIGEST_WALL_MIN,F_WALL_LV_MIN,F_WALL_ST_MIN
+  real*8 :: PHEN,DMLV,DMST,DMSTUB,DM,DMSH,DMRES
+  real*8 :: F_WALL_DM,F_WALL_DMSH,F_WALL_LV,F_WALL_ST
+  real*8 :: F_DIGEST_DM,F_DIGEST_DMSH,F_DIGEST_LV,F_DIGEST_ST,F_DIGEST_WALL
+  real*8 :: F_DIGEST_WALL_MIN,F_WALL_LV_MIN,F_WALL_ST_MIN
   F_WALL_LV_MIN     = F_WALL_LV_FMIN * F_WALL_LV_MAX
   F_WALL_ST_MIN     = F_WALL_ST_FMIN * F_WALL_ST_MAX
   F_WALL_LV         = F_WALL_LV_MIN + PHEN * ( F_WALL_LV_MAX - F_WALL_LV_MIN )
