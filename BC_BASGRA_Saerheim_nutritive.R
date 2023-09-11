@@ -17,4 +17,3 @@
    # imagefilename <- paste( "BC_Saerheim_nutritive",
    #                         format(Sys.time(),"%H_%M.Rdata"), sep="" )
    # save.image(file=imagefilename)
-   

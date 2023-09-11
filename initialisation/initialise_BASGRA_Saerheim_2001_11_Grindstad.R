@@ -1,7 +1,7 @@
 ## initialise_BASGRA_Saerheim_2001_11_Grindstad.R ##
 
 ## 1. GENERAL INITIALISATION ##
-   dyn.load("BASGRA.DLL")
+   dyn.load("BASGRA.so")
    source('initialisation/initialise_BASGRA_general.R')
 
 ## 2. SITE CONDITIONS ##
@@ -10,8 +10,8 @@
    NDAYS          <- as.integer(250)
    file_weather   <- 'weather/weather_01_Saerheim_format_bioforsk.txt'
    file_params    <- 'parameters/parameters.txt'
-     parcol       <- 13  
-   
+     parcol       <- 13
+
 ## 3. CREATE WEATHER INPUT AND CALENDARS ##
    matrix_weather    <- read_weather_Bioforsk(year_start,doy_start,NDAYS,file_weather)
     calendar_fert[1,] <- c( 2001, 115, 140*1000/ 10000      ) # 140 kg N ha-1 applied on day 115
@@ -26,13 +26,12 @@
 #    days_harvest [4,] <- c( 2000, 214)
 #    days_harvest [5,] <- c( 2001, 171 )
 #    days_harvest [6,] <- c( 2001, 219 )
-   
+
    days_harvest      <- as.integer(days_harvest)
-   
+
 ## 4. CREATE VECTOR "PARAMS" ##
    df_params      <- read.table(file_params,header=T,sep="\t",row.names=1)
    params         <- df_params[,parcol]
-   
+
 ## 5. CREATE EMPTY MATRIX y ##
    y              <- matrix(0,NDAYS,NOUT)
-   
