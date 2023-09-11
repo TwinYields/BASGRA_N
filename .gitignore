@@ -11,3 +11,4 @@ documentation/~$SGRA_N_UserGuide.docx
 *.o
 *.pyf
 *.pdf
+.ipynb_checkpoints
