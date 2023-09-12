@@ -30,7 +30,9 @@ f2py -c  parameters_plant.f90 parameters_site.f90 \
     resources.f90 environment.f90 soil.f90 plant.f90 set_params.f90 \
      BASGRA.f90  -m basgra
 
-
+f2py -c  parameters_plant.f90 parameters_site.f90 \
+    resources.f90 environment.f90 soil.f90 plant.f90 set_params.f90 \
+     bglib.f90  -m bglib
 
 #python -c 'import basgra; print("hello")'
 

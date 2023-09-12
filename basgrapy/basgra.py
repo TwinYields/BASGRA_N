@@ -114,7 +114,8 @@ SnowMelt = THAWPS = wRemain = 0.0
 # %%
 # From line
 # do day = 1, NDAYS
-bgs = basgra.soil
+bgs = bg.soil
+bgr = bg.resources
 
 day = 0
 doy = bge.doyi[day]
@@ -127,5 +128,10 @@ bgs.physics(bge.davtmp, Fdepth, ROOTD, Sdepth, WAS, Frate)
 bge.microclimate(doy, DRYSTOR, Fdepth, Frate, LAI, Sdepth, bgs.tsurf, WAPL, WAPS,
                 WETSTOR, FREEZEPL[0],INFIL,PackMelt,poolDrain,poolInfil,pSnow,reFreeze,
                 SnowMelt,THAWPS,wRemain)
+bge.penman(LAI)
+bgr.light(bge.dayl, bge.dtr, LAI, bge.par)
+
+#%%
+
 
 # %%
