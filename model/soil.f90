@@ -116,7 +116,7 @@ Subroutine N_fert(year,doy,DAYS_FERT,NFERTV, Nfert)
   do i=1,100
     if ( (year==DAYS_FERT (i,1)) .and. (doy==DAYS_FERT (i,2)) ) then
       Nfert   = NFERTV (i)
-	end if
+    end if
   end do
 end Subroutine N_fert
 

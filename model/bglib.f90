@@ -74,10 +74,11 @@ real*8:: Ndep, Nfert
 real*8:: F_DIGEST_DM, F_DIGEST_DMSH, F_DIGEST_LV, F_DIGEST_ST, F_DIGEST_WALL
 real*8:: F_WALL_DM  , F_WALL_DMSH  , F_WALL_LV  , F_WALL_ST
 
-! Can be called outside of module?
+! Can be called outside of module
 ! Parameters
 ! call set_params(PARAMS)
 
+! Can also be set from e.g. python directly
 ! Calendar & weather
 ! YEARI  = MATRIX_WEATHER(:,1)
 ! DOYI   = MATRIX_WEATHER(:,2)
